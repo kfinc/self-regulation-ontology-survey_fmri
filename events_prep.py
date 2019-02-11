@@ -4,6 +4,12 @@ import numpy as np
 
 
 def get_items_order():
+    
+    """Function which returns dictionary with ordering id (Q01-Q40) assigned to each question. 
+    This dictionary can be further used to map all quesion to their unique (template) order, therefore, to obtain the same order of beta vales for each person
+    Author: Karolina Finc
+    """
+    
 
     grit_items = [
         'New ideas and projects sometimes distract me from previous ones.',
@@ -45,11 +51,6 @@ def get_items_order():
         'As I get older, I begin to experience time as limited.'
      ]
 
-    impulse_venture_items = [
-        'Do you welcome new and exciting experiences and sensations even if they are a little frightening and unconventional?',
-        'Do you sometimes like doing things that are a bit frightening?',
-        'Would you enjoy the sensation of skiing very fast down a high mountain slope?'
-    ]
 
     upps_items = [
         "Sometimes when I feel bad, I can't seem to stop what I am doing even though it is making me feel worse.",
@@ -59,8 +60,14 @@ def get_items_order():
         'When I am really excited, I tend not to think of the consequences of my actions.',
         'I tend to act without thinking when I am really excited.'
     ]
-
-    item_text = grit_items + brief_items + future_time_items + impulse_venture_items + upps_items
+    
+    impulse_venture_items = [
+        'Do you welcome new and exciting experiences and sensations even if they are a little frightening and unconventional?',
+        'Do you sometimes like doing things that are a bit frightening?',
+        'Would you enjoy the sensation of skiing very fast down a high mountain slope?'
+    ]
+    
+    item_text = grit_items + brief_items + future_time_items + upps_items + impulse_venture_items
     item_id = ['Q{:0>2d}'.format(i+1) for i in range(len(item_text))]
     item_id_map = dict(zip(item_text, item_id))
 
@@ -68,6 +75,12 @@ def get_items_order():
 
 
 def get_timing_correction(filey, TR=680, n_TRs=14):
+    
+    """Function to correct processing of a few problematic files need to change time_elapsed to reflect the fact that fmri triggers were sent outto quickly (at 8 times the rate), 
+    thus starting the scan 14 TRs early. Those 14 TRs of data therefore need to be thrown out, which is accomplished by setting the "0" of the scan 14 TRs later
+    Author: Ian Eisenberg
+    
+    """
     problematic_files = ['s568_MotorStop.csv', 's568_Stroop.csv',
                          's568_SurveyMedley.csv', 's568_DPX.csv',
                          's568_Discount.csv',
@@ -84,6 +97,10 @@ def get_timing_correction(filey, TR=680, n_TRs=14):
         return 0
 
 def get_drop_columns(df, columns=None, use_default=True):
+    """
+    Function which helps to clean unncecessary columns
+    Author: Ian Eisenberg
+    """
     default_cols = ['block_duration', 'correct_response', 'exp_stage',
                     'feedback_duration', 'possible_responses',
                    'rt', 'stim_duration', 'text', 'time_elapsed',
@@ -97,6 +114,10 @@ def get_drop_columns(df, columns=None, use_default=True):
     return drop_columns
 
 def get_junk_trials(df):
+    """
+    Function which helps to identify junk trials
+    Author: Ian Eisenberg
+    """
     junk = pd.Series(False, df.index)
     if 'correct' in df.columns:
         junk = np.logical_or(junk,np.logical_not(df.correct))
@@ -106,9 +127,10 @@ def get_junk_trials(df):
 
 def get_movement_times(df):
     """
-    time elapsed is evaluated at the end of a trial, so we have to subtract
+    Time elapsed is evaluated at the end of a trial, so we have to subtract
     timing post trial and the entire block duration to get the time when
     the trial started. Then add the reaction time to get the time of movement
+    Author: Ian Eisenberg
     """
     trial_time = df.time_elapsed - df.block_duration - df.timing_post_trial + \
                  df.rt
@@ -116,14 +138,20 @@ def get_movement_times(df):
 
 def get_trial_times(df):
     """
-    time elapsed is evaluated at the end of a trial, so we have to subtract
+    Time elapsed is evaluated at the end of a trial, so we have to subtract
     timing post trial and the entire block duration to get the time when
-    the trial started
+    the trial started.
+    Author: Ian Eisenberg
     """
     trial_time = df.time_elapsed - df.block_duration - df.timing_post_trial
     return trial_time
 
 def create_survey_event(df, duration=None):
+    """
+    Function preprocessing events and returning cleaned data frame.
+    Author: Ian Eisenberg
+    """
+    
     columns_to_drop = get_drop_columns(df,
                                        use_default=False,
                                        columns = ['block_duration',

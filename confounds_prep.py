@@ -33,7 +33,7 @@ def temp_deriv(dataframe, quadratic = False):
         #--- backward difference algorithm
         temp = np.diff(dataframe[col], 1, axis = 0)
         temp = np.insert(temp, 0, 0)
-        temp = pd.DataFrame(temp )
+        temp = pd.DataFrame(temp)
         temp_deriv[col + '_td'] = temp
 
     if quadratic == True:
