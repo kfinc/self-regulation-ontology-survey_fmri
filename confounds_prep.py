@@ -72,3 +72,28 @@ def outliers_fd_dvars(dataframe, fd=0.5, dvars=3):
     outliers.columns = ['scrubbing']
 
     return outliers
+
+
+def confounds_prep(confounds):
+    """Function that calculates motion outliers (frames with frame-wise displacement (FD)
+    and DVARS above predefined threshold).
+
+    Parameters
+    ----------
+    confounds: pandas dataframe with fmriprep confound output
+
+    Returns
+    -------
+    confounds_clean:  pandas dataframe with processed confounds
+
+    """
+
+    confounds_motion = temp_deriv(confounds[confounds.filter(regex='X|Y|Z|RotX|RotY|RotZ').columns], quadratic=False)
+    confounds_acompcor = confounds[confounds.filter(regex='aCompCor').columns]
+    confounds_scrub = outliers_fd_dvars(confounds[confounds.filter(regex='^stdDVARS|Framewise').columns], fd=0.5, dvars=3)
+
+    confounds_clean = pd.concat([confounds_motion,
+                                 confounds_acompcor,
+                                 confounds_scrub], axis=1) 
+    
+    return confounds_clean
