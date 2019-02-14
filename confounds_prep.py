@@ -91,9 +91,12 @@ def confounds_prep(confounds):
     confounds_motion = temp_deriv(confounds[confounds.filter(regex='X|Y|Z|RotX|RotY|RotZ').columns], quadratic=False)
     confounds_acompcor = confounds[confounds.filter(regex='aCompCor').columns]
     confounds_scrub = outliers_fd_dvars(confounds[confounds.filter(regex='^stdDVARS|Framewise').columns], fd=0.5, dvars=3)
-
+    confounds_fd_dvars = confounds[confounds.filter(regex='^stdDVARS|Framewise').columns]
+    confounds_fd_dvars.iloc[0,:] = [0, 0]
+    
     confounds_clean = pd.concat([confounds_motion,
                                  confounds_acompcor,
+                                 confounds_fd_dvars,
                                  confounds_scrub], axis=1) 
     
     return confounds_clean
