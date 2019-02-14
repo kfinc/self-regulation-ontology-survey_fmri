@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import logging
 
-out_dir = f'/home/finc/Dropbox/Projects/SelfReg/data/neuroimaging/1stlevel_survey/'
+out_dir = f'/home/finc/Dropbox/Projects/SelfReg/data/neuroimaging/1stlevel_surveyMedley/'
 
 
 LOG_FILE_ONE = f"{out_dir}missing_fmri.log"
