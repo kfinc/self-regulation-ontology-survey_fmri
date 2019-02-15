@@ -161,7 +161,7 @@ def create_survey_event(df, duration=None):
                                                   'key_press',
                                                   'options',
                                                   'response',
-                                                  #'rt',
+                                                  'rt',
                                                   'stim_duration',
                                                   'stimulus', #added
                                                   'text',
