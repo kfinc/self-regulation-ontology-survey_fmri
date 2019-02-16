@@ -158,10 +158,10 @@ def create_survey_event(df, duration=None):
                                                   'trial_index',     #added
                                                   'internal_node_id', #added
                                                   'exp_id', #added
-                                                  'key_press',
+                                                  #'key_press',
                                                   'options',
                                                   'response',
-                                                  'rt',
+                                                  #'rt',
                                                   'stim_duration',
                                                   'stimulus', #added
                                                   'text',
@@ -186,7 +186,7 @@ def create_survey_event(df, duration=None):
     events_df.insert(0,'movement_onset',get_movement_times(df))
     # convert milliseconds to seconds
     events_df.loc[:,['response_time','onset','duration',
-                     'movement_onset']]/=1000
+                     'movement_onset', 'rt']]/=1000
     # drop unnecessary columns
     events_df = events_df.drop(columns_to_drop, axis=1)
     return events_df
