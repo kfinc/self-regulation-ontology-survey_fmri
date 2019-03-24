@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH --job-name=1stlevel
+#SBATCH --output=1stlevel.out
+#SBATCH --error=1stlevel.err
+#SBATCH --time=48:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=finc@stanford.edu
+#SBATCH --cpus-per-task=16
+#SBATCH --ntasks-per-node=1
+#SBATCH -p russpold
+export PYTHONPATH=""
+
+# set up paths
+# scratch is automatically mounted
+
+img='fmri_env-2019-02-18-a479a7ca5187.simg'
+base_singularity='/oak/stanford/groups/russpold/users/ieisenbe/uh2/fmri_analysis/singularity_images'
+singularity_loc=${base_singularity}/$img
+
+scripts_loc='/home/users/finc/Self_Regulation_Ontology_Survey_fMRI'
+
+# run singularity, scratch is automatically mounted
+singularity exec  ${singularity_loc} \
+    python $scripts_loc/03-beta_series_estimation.py 
