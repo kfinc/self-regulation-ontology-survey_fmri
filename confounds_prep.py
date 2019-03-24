@@ -97,6 +97,7 @@ def confounds_prep(confounds):
     confounds_clean = pd.concat([confounds_motion,
                                  confounds_acompcor,
                                  confounds_fd_dvars,
-                                 confounds_scrub], axis=1) 
+                                 confounds_scrub
+                                ], axis=1) 
     
     return confounds_clean
